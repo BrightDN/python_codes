@@ -1,6 +1,6 @@
 import unittest
-from src.textnode import *
-from src.split_textnodes import split_nodes_images, split_nodes_links
+from src.nodes.textnode import *
+from src.parsing.text.split_textnodes import split_nodes_images, split_nodes_links
 
 class TestSplitImageAndLinkNodes(unittest.TestCase):
     def setUp(self):

@@ -1,5 +1,5 @@
 import unittest
-from src.markup_parsing import extract_markdown_images, extract_markdown_links
+from src.parsing.markdown.markup_parsing import extract_markdown_images, extract_markdown_links
 
 class TestMarkupParsing(unittest.TestCase):
     def setUp(self):

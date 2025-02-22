@@ -1,5 +1,5 @@
 import unittest
-from src.split_markdown_in_blocks import split_markdown_in_blocks
+from src.parsing.block.split_markdown_in_blocks import split_markdown_in_blocks
 
 class TestSplitMarkdownInBlocks(unittest.TestCase):
     def setUp(self):

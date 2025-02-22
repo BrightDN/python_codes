@@ -1,6 +1,6 @@
 import re
-from src.textnode import TextNode, TextType
-from src.markup_parsing import extract_markdown_images, extract_markdown_links
+from src.nodes.textnode import TextNode, TextType
+from src.parsing.markdown.markup_parsing import extract_markdown_images, extract_markdown_links
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -57,7 +57,7 @@ def loopOverNodes(old_nodes, text_type):
                 continue
             remaining_text = node.text
             for text, link in use_function(node.text):
-                split_pattern = f"(?<!`){prefix}\[{text}\]\({link}\)(?!.*`)"
+                split_pattern = fr"(?<!`){prefix}\[{text}\]\({link}\)(?!.*`)"
                 sections = re.split(split_pattern, remaining_text, 1)
                 if sections[0]:
                     new_nodes.append(TextNode(sections[0], TextType.TEXT))

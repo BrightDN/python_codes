@@ -1,9 +1,9 @@
-from src.textnode import TextType
-from src.parentnode import ParentNode
-from src.leafnode import LeafNode
-from src.block_to_block_type import block_to_block_type
-from src.split_markdown_in_blocks import split_markdown_in_blocks
-from src.text_to_textnode import text_to_textnode
+from src.nodes.textnode import TextType
+from src.nodes.parentnode import ParentNode
+from src.nodes.leafnode import LeafNode
+from src.parsing.block.block_to_block_type import block_to_block_type
+from src.parsing.block.split_markdown_in_blocks import split_markdown_in_blocks
+from src.parsing.text.text_to_textnode import text_to_textnode
 
 def markdown_to_html_node(document):
     list_of_children = []
