@@ -2,7 +2,7 @@ import os
 import shutil
 from src.file_operations.generate_page import generate_page
 
-def generate_pages(source_path: str, template_file_path: str, destination_path: str, basepath: str) -> None:
+def generate_pages(source_path: str, template_file_path: str, destination_path: str, basepath) -> None:
     """
     This function takes in 2 parameters and moves all files and directories from the source_path parameter into the destionation_path parameter.
 
