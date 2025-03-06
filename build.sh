@@ -1,1 +1,1 @@
-python3 main.py "/python_static_site_generator/"
+python3 main.py "https://brightdn.github.io/python_static_site_generator/"
