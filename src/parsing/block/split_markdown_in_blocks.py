@@ -1,4 +1,4 @@
-def split_markdown_in_blocks(text):
+def split_markdown_in_blocks(text: str) -> list:
     blocks = []
     for block in text.split("\n\n"):
         if not block.strip():

@@ -9,4 +9,5 @@ def text_to_textnode(text):
     nodes = split_nodes_links(nodes)
     nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
     nodes = split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
     return nodes

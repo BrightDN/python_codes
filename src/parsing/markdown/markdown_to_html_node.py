@@ -12,20 +12,28 @@ def markdown_to_html_node(document):
         list_of_children.append(resolve_block(block))
     return ParentNode("div", list_of_children)
 
+
 def resolve_lists(block, block_type):
-    if not block_type == "ordered list" and not block_type == "unordered list":
+    if block_type == "ordered list":
+        tag = "ol"
+    elif block_type == "unordered list":
+        tag = "ul"
+    else:
         return None
-    list_type = "ul"
-    list_of_leafnodes = []
-    if(block_type == "ordered list"):
-        list_type = "ol"
-    for line in block.split("\n"):
-        if list_type == "ul":
-            line = line[2:]
-        else:
-            line = line[(line.find(". ")+2):]
-        list_of_leafnodes.append(LeafNode("li", line))
-    return ParentNode(list_type, list_of_leafnodes)
+
+    items = []
+
+    for subblock in block.splitlines():
+        if tag == "ul":
+            subblock = subblock[2:].strip()
+        elif tag == "ol":
+            subblock = subblock[subblock.index(".") + 1:].strip()
+        item_content = resolve_block(subblock, is_child_of_list=True)
+        items.append(ParentNode("li", item_content))
+
+    return ParentNode(tag, items)
+
+
 def resolve_heading(block, block_type):
     if not block_type == "heading":
         return None
@@ -33,32 +41,42 @@ def resolve_heading(block, block_type):
 def resolve_multiline_single_leaf(block, block_type):
 
     if block_type == "quote block":
-        lines = [line[2:] for line in block.split("\n")]
-        new_block = "\n".join(lines)
-        return LeafNode("blockquote", new_block)
+        lines = [line[2:] for line in block.split("\n") if line.startswith(">")]
+        children = []
+        for line in lines:
+            if len(line) == 0:
+                children.append(LeafNode(None, "<br>"))
+            else:
+                children.append(LeafNode(None, line))
+        return ParentNode("blockquote", children)
     if block_type == "code":
         new_block = ""
         for line in block.split("\n"):
             new_block += line + "\n"
         return ParentNode("pre", [LeafNode("code", new_block[3:-4].strip())])
     return None
-def resolve_paragraph(block, block_type):
-    if not block_type == "paragraph":
-        return None
+def resolve_paragraph(block, block_type, is_child_of_list):
+    # Process text into inline nodes, including links and text styles
     textnodes = text_to_textnode(block)
     leafnodes = convert_textnodes_to_leafnode(textnodes)
+
+    # If this is inside a list, wrap in <li> and return directly
+    if is_child_of_list:
+        return leafnodes
+    if not block_type == "paragraph":
+        return None
     return ParentNode("p", leafnodes)
 
-def resolve_block(block):
+def resolve_block(block, is_child_of_list=False):
     block_type = block_to_block_type(block)
     if resolve_multiline_single_leaf(block, block_type):
         return resolve_multiline_single_leaf(block, block_type)
-    if resolve_lists(block, block_type):
+    elif resolve_lists(block, block_type):
         return resolve_lists(block, block_type)
-    if resolve_heading(block, block_type):
+    elif resolve_heading(block, block_type):
         return resolve_heading(block, block_type)
-    if resolve_paragraph(block, block_type):
-        return resolve_paragraph(block, block_type)
+    else:
+        return resolve_paragraph(block, block_type, is_child_of_list)
     
 def convert_textnodes_to_leafnode(textnodes):
     leafnodes = []

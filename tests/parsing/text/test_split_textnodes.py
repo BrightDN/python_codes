@@ -19,31 +19,31 @@ class TestSplitTextNodes(unittest.TestCase):
         self.assertEqual(split_nodes_delimiter(self.not_text_type, "**", TextType.BOLD), [TextNode("This is bold text", TextType.BOLD)])
 
     def test_bold(self):
-        self.assertEqual(split_nodes_delimiter(self.bold, "**", TextType.BOLD), [TextNode("This has", TextType.TEXT), TextNode("bold", TextType.BOLD), TextNode("text", TextType.TEXT)])
+        self.assertEqual(split_nodes_delimiter(self.bold, "**", TextType.BOLD), [TextNode("This has ", TextType.TEXT), TextNode("bold", TextType.BOLD), TextNode(" text", TextType.TEXT)])
 
     def test_bold_with_gap(self):
-        self.assertEqual(split_nodes_delimiter(self.bold_with_gap, "**", TextType.BOLD), [TextNode("This has", TextType.TEXT), TextNode(" bold ", TextType.BOLD), TextNode("text", TextType.TEXT)])
+        self.assertEqual(split_nodes_delimiter(self.bold_with_gap, "**", TextType.BOLD), [TextNode("This has ", TextType.TEXT), TextNode(" bold ", TextType.BOLD), TextNode(" text", TextType.TEXT)])
 
     def test_empty(self):
-        self.assertEqual(split_nodes_delimiter(self.empty, "**", TextType.BOLD), [TextNode("This has", TextType.TEXT), TextNode("", TextType.BOLD), TextNode("text", TextType.TEXT)])
+        self.assertEqual(split_nodes_delimiter(self.empty, "**", TextType.BOLD), [TextNode("This has ", TextType.TEXT), TextNode("", TextType.BOLD), TextNode(" text", TextType.TEXT)])
 
     def test_italic(self):
-        self.assertEqual(split_nodes_delimiter(self.italic, "*", TextType.ITALIC), [TextNode("This has", TextType.TEXT), TextNode("italic", TextType.ITALIC), TextNode("text", TextType.TEXT)])    
+        self.assertEqual(split_nodes_delimiter(self.italic, "*", TextType.ITALIC), [TextNode("This has ", TextType.TEXT), TextNode("italic", TextType.ITALIC), TextNode(" text", TextType.TEXT)])    
 
     def test_code(self):
-        self.assertEqual(split_nodes_delimiter(self.code, "`", TextType.CODE), [TextNode("This has", TextType.TEXT), TextNode("code", TextType.CODE), TextNode("text", TextType.TEXT)])
+        self.assertEqual(split_nodes_delimiter(self.code, "`", TextType.CODE), [TextNode("This has ", TextType.TEXT), TextNode("code", TextType.CODE), TextNode(" text", TextType.TEXT)])
 
     def test_no_delimiter(self):
         self.assertEqual(split_nodes_delimiter(self.no_delimiter, "**", TextType.BOLD), [TextNode("No delimiter", TextType.TEXT)])
 
     def test_multiple_delimiter_pairs(self):
-        self.assertEqual(split_nodes_delimiter(self.multiple, "**", TextType.BOLD), [TextNode("This", TextType.TEXT), TextNode("has", TextType.BOLD), TextNode("multiple", TextType.TEXT), TextNode("bold", TextType.BOLD), TextNode("parts", TextType.TEXT)])
+        self.assertEqual(split_nodes_delimiter(self.multiple, "**", TextType.BOLD), [TextNode("This ", TextType.TEXT), TextNode("has", TextType.BOLD), TextNode(" multiple ", TextType.TEXT), TextNode("bold", TextType.BOLD), TextNode(" parts", TextType.TEXT)])
     
     def test_multiple_delimiter_pairs_in_row(self):
-        self.assertEqual(split_nodes_delimiter(self.multiple_in_row, "**", TextType.BOLD), [TextNode("This", TextType.TEXT), TextNode("has", TextType.BOLD), TextNode("multiple bold", TextType.BOLD), TextNode("parts", TextType.TEXT)])
+        self.assertEqual(split_nodes_delimiter(self.multiple_in_row, "**", TextType.BOLD), [TextNode("This ", TextType.TEXT), TextNode("has", TextType.BOLD), TextNode("multiple bold", TextType.BOLD), TextNode(" parts", TextType.TEXT)])
 
     def test_multiple_nodes(self):
-        self.assertEqual(split_nodes_delimiter(self.multiple_nodes, "**", TextType.BOLD), [TextNode("This is the", TextType.TEXT), TextNode("first", TextType.BOLD), TextNode("textnode", TextType.TEXT), TextNode("This is the", TextType.TEXT), TextNode("second", TextType.BOLD), TextNode("textnode", TextType.TEXT)])
+        self.assertEqual(split_nodes_delimiter(self.multiple_nodes, "**", TextType.BOLD), [TextNode("This is the ", TextType.TEXT), TextNode("first", TextType.BOLD), TextNode(" textnode", TextType.TEXT), TextNode("This is the ", TextType.TEXT), TextNode("second", TextType.BOLD), TextNode(" textnode", TextType.TEXT)])
 
     def test_invalid_delim(self):
         with self.assertRaises(Exception):

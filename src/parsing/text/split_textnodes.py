@@ -4,7 +4,7 @@ from src.parsing.markdown.markup_parsing import extract_markdown_images, extract
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
-    if not delimiter in ["*", "**", "`"]:
+    if not delimiter in ["*", "**", "`", "_"]:
         raise Exception("invalid delimiter")
     for node in old_nodes:
         if node.text_type != TextType.TEXT:
@@ -22,10 +22,10 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             delim_text = current_text[first_delim + len(delimiter):second_delim]
             current_text = current_text[second_delim + len(delimiter):]
             if before_text:
-                new_nodes.append(TextNode(before_text.strip(), TextType.TEXT))
+                new_nodes.append(TextNode(before_text, TextType.TEXT))
             new_nodes.append(TextNode(delim_text, text_type))
         if current_text:    
-            new_nodes.append(TextNode(current_text.strip(), TextType.TEXT))
+            new_nodes.append(TextNode(current_text, TextType.TEXT))
     return new_nodes
 
 def split_nodes_images(nodes):

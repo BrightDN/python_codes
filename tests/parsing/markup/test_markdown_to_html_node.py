@@ -22,7 +22,7 @@ class TestMarkdownToHtmlNode(unittest.TestCase):
         self.assertEqual(markdown_to_html_node(self.only_p), ParentNode("div", [ParentNode("p", [LeafNode(None, "paragraph")])]))
 
     def test_paragraph_with_children(self):
-        self.assertEqual(markdown_to_html_node(self.only_p_with_children), ParentNode("div", [ParentNode("p", [LeafNode(None, "paragraph with"), LeafNode("b", "bold"), LeafNode(None, "and"), LeafNode("i", "italic"), LeafNode(None, "parts")])]))
+        self.assertEqual(markdown_to_html_node(self.only_p_with_children), ParentNode("div", [ParentNode("p", [LeafNode(None, "paragraph with "), LeafNode("b", "bold"), LeafNode(None, " and "), LeafNode("i", "italic"), LeafNode(None, " parts")])]))
 
     def test_image(self):
         self.assertEqual(markdown_to_html_node(self.only_img), ParentNode("div", [ParentNode("p", [LeafNode("img", "", {"src":"www.img.com", "alt":"alt text"})])]))
@@ -31,7 +31,7 @@ class TestMarkdownToHtmlNode(unittest.TestCase):
         self.assertEqual(markdown_to_html_node(self.only_link), ParentNode("div", [ParentNode("p", [LeafNode("a", "click", {"href":"www.link.com"})])]))
 
     def test_quoteblock(self):
-        self.assertEqual(markdown_to_html_node(self.only_quote), ParentNode("div", [LeafNode("blockquote", "quote\nsecond line")]))
+        self.assertEqual(markdown_to_html_node(self.only_quote), ParentNode("div", [ParentNode("blockquote", [LeafNode(None, "quote"), LeafNode(None, "second line")])]))
 
     def test_codeblock(self):
         self.assertEqual(markdown_to_html_node(self.only_code), ParentNode("div", [ParentNode("pre", [LeafNode("code", "codeblock")])]))
@@ -43,11 +43,26 @@ class TestMarkdownToHtmlNode(unittest.TestCase):
         self.assertEqual(markdown_to_html_node(self.only_heading2), ParentNode("div", [LeafNode("h2", "heading 2")]))
 
     def test_ordered_list(self):
-        self.assertEqual(markdown_to_html_node(self.only_ordered_list), ParentNode("div", [ParentNode("ol", [LeafNode("li", "List item"), LeafNode("li", "Other list item")])]))
-
+        self.assertEqual(
+        markdown_to_html_node(self.only_ordered_list),
+        ParentNode("div", [
+            ParentNode("ol", [
+                ParentNode("li", [LeafNode(None, "List item")]),
+                ParentNode("li", [LeafNode(None, "Other list item")])
+            ])
+        ])
+    )
+        
     def test_unordered_list(self):
-        self.assertEqual(markdown_to_html_node(self.only_unordered_list), ParentNode("div", [ParentNode("ul", [LeafNode("li", "List item"), LeafNode("li", "Other list item")])]))
-
+        self.assertEqual(
+        markdown_to_html_node(self.only_unordered_list),
+        ParentNode("div", [
+            ParentNode("ul", [
+                ParentNode("li", [LeafNode(None, "List item")]),
+                ParentNode("li", [LeafNode(None, "Other list item")])
+            ])
+        ])
+    )
     def test_multiblock(self):
         self.assertEqual(markdown_to_html_node(self.multi_block), ParentNode("div", [ParentNode("p", [LeafNode(None, "paragraph")]), ParentNode("p", [LeafNode(None, "other paragraph")])]))
 
