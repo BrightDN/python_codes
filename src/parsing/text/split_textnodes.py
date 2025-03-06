@@ -16,7 +16,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             first_delim = current_text.find(delimiter)
             second_delim = current_text.find(delimiter, first_delim + len(delimiter))
             if second_delim == -1:
-                raise Exception(f"Text contains an opening '{delimiter}' but no closing '{delimiter}'")
+                raise Exception(f"Text contains an opening '{delimiter}' but no closing '{delimiter}', error occured at: {current_text}")
                 
             before_text = current_text[:first_delim]
             delim_text = current_text[first_delim + len(delimiter):second_delim]

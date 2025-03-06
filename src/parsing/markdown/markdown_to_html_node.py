@@ -19,18 +19,17 @@ def resolve_lists(block, block_type):
     elif block_type == "unordered list":
         tag = "ul"
     else:
+        
         return None
 
     items = []
-
-    for subblock in block.splitlines():
+    for subblock in block.split('\n'):
         if tag == "ul":
-            subblock = subblock[2:].strip()
+            subblock = subblock[1:].strip()
         elif tag == "ol":
             subblock = subblock[subblock.index(".") + 1:].strip()
         item_content = resolve_block(subblock, is_child_of_list=True)
         items.append(ParentNode("li", item_content))
-
     return ParentNode(tag, items)
 
 
@@ -56,11 +55,9 @@ def resolve_multiline_single_leaf(block, block_type):
         return ParentNode("pre", [LeafNode("code", new_block[3:-4].strip())])
     return None
 def resolve_paragraph(block, block_type, is_child_of_list):
-    # Process text into inline nodes, including links and text styles
     textnodes = text_to_textnode(block)
     leafnodes = convert_textnodes_to_leafnode(textnodes)
 
-    # If this is inside a list, wrap in <li> and return directly
     if is_child_of_list:
         return leafnodes
     if not block_type == "paragraph":
@@ -70,13 +67,16 @@ def resolve_paragraph(block, block_type, is_child_of_list):
 def resolve_block(block, is_child_of_list=False):
     block_type = block_to_block_type(block)
     if resolve_multiline_single_leaf(block, block_type):
-        return resolve_multiline_single_leaf(block, block_type)
-    elif resolve_lists(block, block_type):
-        return resolve_lists(block, block_type)
-    elif resolve_heading(block, block_type):
-        return resolve_heading(block, block_type)
-    else:
-        return resolve_paragraph(block, block_type, is_child_of_list)
+        result = resolve_multiline_single_leaf(block, block_type)
+        return result
+    if resolve_lists(block, block_type):
+        result = resolve_lists(block, block_type)
+        return result
+    if resolve_heading(block, block_type):
+        result = resolve_heading(block, block_type)
+        return result
+    result = resolve_paragraph(block, block_type, is_child_of_list)
+    return result
     
 def convert_textnodes_to_leafnode(textnodes):
     leafnodes = []

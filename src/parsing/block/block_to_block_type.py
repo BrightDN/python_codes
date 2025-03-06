@@ -6,7 +6,7 @@ def block_to_block_type(block: str) -> str:
         return "code"
     if resolve_ordered_list(block):
         return "ordered list"
-    if resolve_multiline_code_block(block.strip(), r"^[*|-] ?", "unordered list"):
+    if resolve_multiline_code_block(block.strip(), r"^([\*\-]) ", "unordered list"):
         return "unordered list"
     if resolve_multiline_code_block(block.strip(), r"^\> ?", "quote block"):
         return "quote block"
